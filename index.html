@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ETHIO JACKPOT</title>
+
   <style>
     * { box-sizing: border-box; }
 
@@ -136,6 +137,68 @@
       text-align: center;
       margin-top: 15px;
     }
+
+    /* Confirmation window */
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 360px;
+      background: #12233b;
+      border: 1px solid #f4c542;
+      border-radius: 18px;
+      padding: 25px 20px;
+      text-align: center;
+    }
+
+    .modal h2 {
+      color: #f4c542;
+      margin-top: 0;
+      font-size: 22px;
+    }
+
+    .modal-text {
+      color: #aab6c8;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
+    .ticket-numbers {
+      color: #f4c542;
+      font-size: 25px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin: 20px 0;
+    }
+
+    .price {
+      font-size: 17px;
+      margin: 15px 0;
+    }
+
+    .success-icon {
+      font-size: 38px;
+      color: #f4c542;
+      margin-bottom: 10px;
+    }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 
@@ -190,6 +253,60 @@
     </p>
 
   </main>
+
+  <!-- Confirmation window -->
+
+  <div class="modal-overlay" id="ticketModal">
+    <div class="modal">
+
+      <div id="confirmationContent">
+        <h2>CONFIRM YOUR TICKET</h2>
+
+        <p class="modal-text">
+          Please check your selected numbers.
+        </p>
+
+        <div class="ticket-numbers" id="modalNumbers"></div>
+
+        <div class="price">
+          Ticket Price: <strong>ETB 20</strong>
+        </div>
+
+        <p class="notice">
+          DEMO ONLY — No real payment will be made.
+        </p>
+
+        <button class="button" onclick="completeTicket()">
+          CONFIRM TICKET
+        </button>
+
+        <button class="button secondary" onclick="closeModal()">
+          CANCEL
+        </button>
+      </div>
+
+      <div id="successContent" class="hidden">
+        <div class="success-icon">✓</div>
+
+        <h2>TICKET CONFIRMED!</h2>
+
+        <p class="modal-text">
+          Your demo selection has been confirmed.
+        </p>
+
+        <div class="ticket-numbers" id="successNumbers"></div>
+
+        <p class="notice">
+          No real payment has been made.
+        </p>
+
+        <button class="button" onclick="finishAndClose()">
+          DONE
+        </button>
+      </div>
+
+    </div>
+  </div>
 
   <script>
     let selectedNumbers = [];
@@ -252,12 +369,32 @@
 
       const numbers = selectedNumbers.slice().sort((a,b) => a-b);
 
-      if (confirm("Confirm your DEMO ticket?\n\nNumbers: " +
-        numbers.join(" – ") + "\n\nPrice: ETB 20 (SIMULATED)")) {
-        alert("Demo selection confirmed!\n\nNumbers: " +
-          numbers.join(" – ") +
-          "\n\nNo real payment has been made.");
-      }
+      document.getElementById("modalNumbers").textContent =
+        numbers.join(" – ");
+
+      document.getElementById("confirmationContent").classList.remove("hidden");
+      document.getElementById("successContent").classList.add("hidden");
+
+      document.getElementById("ticketModal").classList.add("show");
+    }
+
+    function completeTicket() {
+      const numbers = selectedNumbers.slice().sort((a,b) => a-b);
+
+      document.getElementById("successNumbers").textContent =
+        numbers.join(" – ");
+
+      document.getElementById("confirmationContent").classList.add("hidden");
+      document.getElementById("successContent").classList.remove("hidden");
+    }
+
+    function closeModal() {
+      document.getElementById("ticketModal").classList.remove("show");
+    }
+
+    function finishAndClose() {
+      closeModal();
+      clearNumbers();
     }
   </script>
 </body>
