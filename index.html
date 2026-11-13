@@ -17,15 +17,9 @@
       padding: 12px;
     }
 
-    .app {
-      max-width: 600px;
-      margin: auto;
-    }
+    .app { max-width: 600px; margin: auto; }
 
-    header {
-      text-align: center;
-      padding: 20px 0;
-    }
+    header { text-align: center; padding: 20px 0; }
 
     .logo {
       color: #f4c542;
@@ -34,10 +28,7 @@
       letter-spacing: 2px;
     }
 
-    .subtitle {
-      color: #aab6c8;
-      margin-top: 8px;
-    }
+    .subtitle { color: #aab6c8; margin-top: 8px; }
 
     .demo {
       background: #493a12;
@@ -107,13 +98,8 @@
       outline: none;
     }
 
-    .number-input:focus {
-      border-color: #f4c542;
-    }
-
-    .number-input::placeholder {
-      color: #75869d;
-    }
+    .number-input:focus { border-color: #f4c542; }
+    .number-input::placeholder { color: #75869d; }
 
     .button {
       width: 100%;
@@ -128,10 +114,7 @@
       margin-top: 10px;
     }
 
-    .secondary {
-      background: #263b57;
-      color: white;
-    }
+    .secondary { background: #263b57; color: white; }
 
     .notice {
       color: #aab6c8;
@@ -162,26 +145,12 @@
       line-height: 1.7;
     }
 
-    .transaction {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      border-bottom: 1px solid #263b57;
-      padding: 10px 0;
-      font-size: 13px;
-    }
-
-    .credit { color: #65d69a; }
-    .debit { color: #ff8c8c; }
-
     .empty {
       color: #aab6c8;
       text-align: center;
       font-size: 13px;
       padding: 15px 0;
     }
-
-    /* Confirmation window */
 
     .modal-overlay {
       display: none;
@@ -194,9 +163,7 @@
       padding: 20px;
     }
 
-    .modal-overlay.show {
-      display: flex;
-    }
+    .modal-overlay.show { display: flex; }
 
     .modal {
       width: 100%;
@@ -220,7 +187,7 @@
       margin-bottom: 18px;
     }
 
-    .ticket-numbers {
+    .modal .ticket-numbers {
       color: #f4c542;
       font-size: 25px;
       font-weight: bold;
@@ -245,9 +212,7 @@
       <div class="subtitle">Your Numbers. Your Chance.</div>
     </header>
 
-    <div class="demo">
-      DEMO VERSION — NO REAL MONEY
-    </div>
+    <div class="demo">DEMO VERSION — NO REAL MONEY</div>
 
     <div class="jackpots">
       <div class="card">
@@ -275,98 +240,47 @@
       <h3>Enter four different two-digit numbers (01–99)</h3>
 
       <div class="numbers-inputs">
-        <input class="number-input" type="text"
-          inputmode="numeric" maxlength="2" placeholder="01"
-          aria-label="First number">
-
-        <input class="number-input" type="text"
-          inputmode="numeric" maxlength="2" placeholder="02"
-          aria-label="Second number">
-
-        <input class="number-input" type="text"
-          inputmode="numeric" maxlength="2" placeholder="03"
-          aria-label="Third number">
-
-        <input class="number-input" type="text"
-          inputmode="numeric" maxlength="2" placeholder="04"
-          aria-label="Fourth number">
+        <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="01" aria-label="First number">
+        <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="02" aria-label="Second number">
+        <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="03" aria-label="Third number">
+        <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="04" aria-label="Fourth number">
       </div>
 
       <p class="notice">Enter numbers from 01 to 99. No duplicates.</p>
       <p class="notice">Demo ticket price: ETB 20</p>
 
-      <button class="button secondary" onclick="clearInputs()">
-        CLEAR NUMBERS
-      </button>
-
-      <button class="button" onclick="confirmTicket()">
-        CONFIRM DEMO TICKET
-      </button>
+      <button class="button secondary" onclick="clearInputs()">CLEAR NUMBERS</button>
+      <button class="button" onclick="confirmTicket()">CONFIRM DEMO TICKET</button>
     </div>
 
     <h2 class="section-title">MY TICKETS</h2>
 
     <div class="card">
-      <div id="ticketsList" class="empty">
-        You have no tickets yet.
-      </div>
+      <div id="ticketsList" class="empty">You have no tickets yet.</div>
     </div>
 
-    <h2 class="section-title">TRANSACTION HISTORY</h2>
-
-    <div class="card">
-      <div id="transactionsList"></div>
-    </div>
-
-    <p class="notice">
-      ETHIO JACKPOT · Prototype Version 2.0
-    </p>
-
+    <p class="notice">ETHIO JACKPOT · Prototype Version 2.0</p>
   </main>
-
-  <!-- Confirmation window -->
 
   <div class="modal-overlay" id="ticketModal">
     <div class="modal">
 
       <div id="confirmationContent">
         <h2>CONFIRM YOUR TICKET</h2>
-
-        <p class="modal-text">
-          Please check your selected numbers.
-        </p>
-
+        <p class="modal-text">Please check your selected numbers.</p>
         <div class="ticket-numbers" id="modalNumbers"></div>
-
         <p>Ticket Price: <strong>ETB 20</strong></p>
-
-        <p class="notice">
-          DEMO ONLY — No real payment will be made.
-        </p>
-
-        <button class="button" onclick="completeTicket()">
-          CONFIRM TICKET
-        </button>
-
-        <button class="button secondary" onclick="closeModal()">
-          CANCEL
-        </button>
+        <p class="notice">DEMO ONLY — No real payment will be made.</p>
+        <button class="button" onclick="completeTicket()">CONFIRM TICKET</button>
+        <button class="button secondary" onclick="closeModal()">CANCEL</button>
       </div>
 
       <div id="successContent" class="hidden">
         <h2>TICKET CONFIRMED!</h2>
-
-        <p class="modal-text">
-          Your demo ticket has been saved.
-        </p>
-
+        <p class="modal-text">Your demo ticket has been saved.</p>
         <div class="ticket-numbers" id="successNumbers"></div>
-
         <p class="notice">No real payment has been made.</p>
-
-        <button class="button" onclick="finishAndClose()">
-          DONE
-        </button>
+        <button class="button" onclick="finishAndClose()">DONE</button>
       </div>
 
     </div>
@@ -383,23 +297,7 @@
       localStorage.setItem("ej_wallet", wallet);
     }
 
-    let tickets = JSON.parse(
-      localStorage.getItem("ej_tickets") || "[]"
-    );
-
-    let transactions = JSON.parse(
-      localStorage.getItem("ej_transactions") || "[]"
-    );
-
-    if (transactions.length === 0) {
-      transactions.push({
-        description: "Demo starting balance",
-        amount: 50,
-        date: new Date().toLocaleString()
-      });
-      saveData();
-    }
-
+    let tickets = JSON.parse(localStorage.getItem("ej_tickets") || "[]");
     let pendingNumbers = [];
 
     const numberInputs = document.querySelectorAll(".number-input");
@@ -417,7 +315,6 @@
     function saveData() {
       localStorage.setItem("ej_wallet", wallet);
       localStorage.setItem("ej_tickets", JSON.stringify(tickets));
-      localStorage.setItem("ej_transactions", JSON.stringify(transactions));
     }
 
     function renderWallet() {
@@ -441,22 +338,6 @@
             Price: ETB 20<br>
             Date: ${ticket.date}
           </div>
-        </div>
-      `).join("");
-    }
-
-    function renderTransactions() {
-      const list = document.getElementById("transactionsList");
-
-      list.innerHTML = transactions.slice().reverse().map(item => `
-        <div class="transaction">
-          <div>
-            ${item.description}<br>
-            <span class="ticket-info">${item.date}</span>
-          </div>
-          <strong class="${item.amount >= 0 ? "credit" : "debit"}">
-            ${item.amount >= 0 ? "+" : "-"}ETB ${Math.abs(item.amount).toFixed(2)}
-          </strong>
         </div>
       `).join("");
     }
@@ -491,20 +372,16 @@
 
     function confirmTicket() {
       const numbers = getEnteredNumbers();
-
       if (!numbers) return;
 
       if (wallet < PRICE) {
-        alert("Insufficient wallet balance. Your balance is ETB " +
-          wallet.toFixed(2));
+        alert("Insufficient wallet balance. Your balance is ETB " + wallet.toFixed(2));
         return;
       }
 
       pendingNumbers = numbers;
 
-      document.getElementById("modalNumbers").textContent =
-        numbers.join(" – ");
-
+      document.getElementById("modalNumbers").textContent = numbers.join(" – ");
       document.getElementById("confirmationContent").classList.remove("hidden");
       document.getElementById("successContent").classList.add("hidden");
       document.getElementById("ticketModal").classList.add("show");
@@ -526,17 +403,9 @@
       };
 
       tickets.push(ticket);
-
-      transactions.push({
-        description: "Ticket purchase " + ticket.reference,
-        amount: -PRICE,
-        date: ticket.date
-      });
-
       saveData();
       renderWallet();
       renderTickets();
-      renderTransactions();
 
       document.getElementById("successNumbers").textContent =
         pendingNumbers.join(" – ");
@@ -557,7 +426,6 @@
 
     renderWallet();
     renderTickets();
-    renderTransactions();
   </script>
 </body>
 </html>
