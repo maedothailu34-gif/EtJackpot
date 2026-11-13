@@ -59,7 +59,7 @@
       background: #12233b;
       border: 1px solid #263b57;
       border-radius: 14px;
-      padding: 14px;
+      padding: 16px;
       margin-bottom: 14px;
     }
 
@@ -80,37 +80,39 @@
       font-size: 19px;
     }
 
-    .numbers {
-      display: grid;
-      grid-template-columns: repeat(10, minmax(0, 1fr));
-      gap: 5px;
+    .wallet-balance {
+      color: #f4c542;
+      font-size: 28px;
+      font-weight: bold;
     }
 
-    .number {
+    .numbers-inputs {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .number-input {
       width: 100%;
       min-width: 0;
-      padding: 0;
-      background: #192c46;
-      color: white;
-      border: 1px solid #344a66;
-      border-radius: 6px;
       aspect-ratio: 1;
-      font-size: clamp(10px, 3vw, 13px);
-      cursor: pointer;
+      background: #192c46;
+      color: #f4c542;
+      border: 2px solid #344a66;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 25px;
+      font-weight: bold;
+      outline: none;
     }
 
-    .number.selected {
-      background: #f4c542;
-      color: #081426;
-      font-weight: bold;
+    .number-input:focus {
       border-color: #f4c542;
     }
 
-    .selected-display {
-      color: #f4c542;
-      font-weight: bold;
-      min-height: 25px;
-      margin: 10px 0;
+    .number-input::placeholder {
+      color: #75869d;
     }
 
     .button {
@@ -136,6 +138,47 @@
       font-size: 12px;
       text-align: center;
       margin-top: 15px;
+    }
+
+    .ticket {
+      background: #192c46;
+      border: 1px solid #344a66;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 10px;
+    }
+
+    .ticket-number {
+      color: #f4c542;
+      font-size: 21px;
+      font-weight: bold;
+      margin: 10px 0;
+      letter-spacing: 2px;
+    }
+
+    .ticket-info {
+      color: #aab6c8;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .transaction {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid #263b57;
+      padding: 10px 0;
+      font-size: 13px;
+    }
+
+    .credit { color: #65d69a; }
+    .debit { color: #ff8c8c; }
+
+    .empty {
+      color: #aab6c8;
+      text-align: center;
+      font-size: 13px;
+      padding: 15px 0;
     }
 
     /* Confirmation window */
@@ -185,19 +228,11 @@
       margin: 20px 0;
     }
 
-    .price {
-      font-size: 17px;
-      margin: 15px 0;
-    }
+    .hidden { display: none; }
 
-    .success-icon {
-      font-size: 38px;
-      color: #f4c542;
-      margin-bottom: 10px;
-    }
-
-    .hidden {
-      display: none;
+    @media (max-width: 350px) {
+      .numbers-inputs { gap: 6px; }
+      .number-input { font-size: 21px; }
     }
   </style>
 </head>
@@ -226,21 +261,42 @@
       </div>
     </div>
 
-    <h2 class="section-title">Choose Your Numbers</h2>
+    <h2 class="section-title">MY WALLET</h2>
 
     <div class="card">
-      <h3>Select exactly 4 different numbers (1–99)</h3>
+      <h3>AVAILABLE DEMO BALANCE</h3>
+      <div class="wallet-balance" id="balance">ETB 50.00</div>
+      <p class="notice">Simulated wallet balance</p>
+    </div>
 
-      <div class="selected-display" id="selected">
-        No numbers selected
+    <h2 class="section-title">CHOOSE YOUR NUMBERS</h2>
+
+    <div class="card">
+      <h3>Enter four different two-digit numbers (01–99)</h3>
+
+      <div class="numbers-inputs">
+        <input class="number-input" type="text"
+          inputmode="numeric" maxlength="2" placeholder="01"
+          aria-label="First number">
+
+        <input class="number-input" type="text"
+          inputmode="numeric" maxlength="2" placeholder="02"
+          aria-label="Second number">
+
+        <input class="number-input" type="text"
+          inputmode="numeric" maxlength="2" placeholder="03"
+          aria-label="Third number">
+
+        <input class="number-input" type="text"
+          inputmode="numeric" maxlength="2" placeholder="04"
+          aria-label="Fourth number">
       </div>
 
-      <div class="numbers" id="numbers"></div>
-
+      <p class="notice">Enter numbers from 01 to 99. No duplicates.</p>
       <p class="notice">Demo ticket price: ETB 20</p>
 
-      <button class="button secondary" onclick="clearNumbers()">
-        CLEAR SELECTION
+      <button class="button secondary" onclick="clearInputs()">
+        CLEAR NUMBERS
       </button>
 
       <button class="button" onclick="confirmTicket()">
@@ -248,8 +304,22 @@
       </button>
     </div>
 
+    <h2 class="section-title">MY TICKETS</h2>
+
+    <div class="card">
+      <div id="ticketsList" class="empty">
+        You have no tickets yet.
+      </div>
+    </div>
+
+    <h2 class="section-title">TRANSACTION HISTORY</h2>
+
+    <div class="card">
+      <div id="transactionsList"></div>
+    </div>
+
     <p class="notice">
-      ETHIO JACKPOT · Prototype Version 1.0
+      ETHIO JACKPOT · Prototype Version 2.0
     </p>
 
   </main>
@@ -268,9 +338,7 @@
 
         <div class="ticket-numbers" id="modalNumbers"></div>
 
-        <div class="price">
-          Ticket Price: <strong>ETB 20</strong>
-        </div>
+        <p>Ticket Price: <strong>ETB 20</strong></p>
 
         <p class="notice">
           DEMO ONLY — No real payment will be made.
@@ -286,19 +354,15 @@
       </div>
 
       <div id="successContent" class="hidden">
-        <div class="success-icon">✓</div>
-
         <h2>TICKET CONFIRMED!</h2>
 
         <p class="modal-text">
-          Your demo selection has been confirmed.
+          Your demo ticket has been saved.
         </p>
 
         <div class="ticket-numbers" id="successNumbers"></div>
 
-        <p class="notice">
-          No real payment has been made.
-        </p>
+        <p class="notice">No real payment has been made.</p>
 
         <button class="button" onclick="finishAndClose()">
           DONE
@@ -309,80 +373,173 @@
   </div>
 
   <script>
-    let selectedNumbers = [];
+    const PRICE = 20;
 
-    const grid = document.getElementById("numbers");
+    let wallet = Number(localStorage.getItem("ej_wallet"));
 
-    for (let i = 1; i <= 99; i++) {
-      const btn = document.createElement("button");
-
-      btn.className = "number";
-      btn.textContent = i;
-
-      btn.onclick = function () {
-        selectNumber(i, btn);
-      };
-
-      grid.appendChild(btn);
+    if (localStorage.getItem("ej_wallet") === null ||
+        !Number.isFinite(wallet)) {
+      wallet = 50;
+      localStorage.setItem("ej_wallet", wallet);
     }
 
-    function selectNumber(number, button) {
-      if (selectedNumbers.includes(number)) {
-        selectedNumbers = selectedNumbers.filter(n => n !== number);
-        button.classList.remove("selected");
-      } else {
-        if (selectedNumbers.length >= 4) {
-          alert("You can select only 4 numbers.");
-          return;
-        }
+    let tickets = JSON.parse(
+      localStorage.getItem("ej_tickets") || "[]"
+    );
 
-        selectedNumbers.push(number);
-        button.classList.add("selected");
-      }
+    let transactions = JSON.parse(
+      localStorage.getItem("ej_transactions") || "[]"
+    );
 
-      updateSelection();
-    }
-
-    function updateSelection() {
-      const display = document.getElementById("selected");
-
-      display.textContent = selectedNumbers.length
-        ? selectedNumbers.slice().sort((a,b) => a-b).join(" – ")
-        : "No numbers selected";
-    }
-
-    function clearNumbers() {
-      selectedNumbers = [];
-
-      document.querySelectorAll(".number").forEach(btn => {
-        btn.classList.remove("selected");
+    if (transactions.length === 0) {
+      transactions.push({
+        description: "Demo starting balance",
+        amount: 50,
+        date: new Date().toLocaleString()
       });
-
-      updateSelection();
+      saveData();
     }
 
-    function confirmTicket() {
-      if (selectedNumbers.length !== 4) {
-        alert("Please select exactly 4 numbers.");
+    let pendingNumbers = [];
+
+    const numberInputs = document.querySelectorAll(".number-input");
+
+    numberInputs.forEach((input, index) => {
+      input.addEventListener("input", function () {
+        this.value = this.value.replace(/[^0-9]/g, "").slice(0, 2);
+
+        if (this.value.length === 2 && index < 3) {
+          numberInputs[index + 1].focus();
+        }
+      });
+    });
+
+    function saveData() {
+      localStorage.setItem("ej_wallet", wallet);
+      localStorage.setItem("ej_tickets", JSON.stringify(tickets));
+      localStorage.setItem("ej_transactions", JSON.stringify(transactions));
+    }
+
+    function renderWallet() {
+      document.getElementById("balance").textContent =
+        "ETB " + wallet.toFixed(2);
+    }
+
+    function renderTickets() {
+      const list = document.getElementById("ticketsList");
+
+      if (tickets.length === 0) {
+        list.innerHTML = '<div class="empty">You have no tickets yet.</div>';
         return;
       }
 
-      const numbers = selectedNumbers.slice().sort((a,b) => a-b);
+      list.innerHTML = tickets.slice().reverse().map(ticket => `
+        <div class="ticket">
+          <strong>Ticket ${ticket.reference}</strong>
+          <div class="ticket-number">${ticket.numbers.join(" – ")}</div>
+          <div class="ticket-info">
+            Price: ETB 20<br>
+            Date: ${ticket.date}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function renderTransactions() {
+      const list = document.getElementById("transactionsList");
+
+      list.innerHTML = transactions.slice().reverse().map(item => `
+        <div class="transaction">
+          <div>
+            ${item.description}<br>
+            <span class="ticket-info">${item.date}</span>
+          </div>
+          <strong class="${item.amount >= 0 ? "credit" : "debit"}">
+            ${item.amount >= 0 ? "+" : "-"}ETB ${Math.abs(item.amount).toFixed(2)}
+          </strong>
+        </div>
+      `).join("");
+    }
+
+    function clearInputs() {
+      numberInputs.forEach(input => input.value = "");
+      numberInputs[0].focus();
+    }
+
+    function getEnteredNumbers() {
+      const values = Array.from(numberInputs).map(input => input.value.trim());
+
+      if (values.some(value => !/^\d{2}$/.test(value))) {
+        alert("Please enter all four numbers using two digits each.");
+        return null;
+      }
+
+      const numbers = values.map(Number);
+
+      if (numbers.some(n => n < 1 || n > 99)) {
+        alert("Numbers must be between 01 and 99.");
+        return null;
+      }
+
+      if (new Set(numbers).size !== 4) {
+        alert("Please enter four different numbers.");
+        return null;
+      }
+
+      return values;
+    }
+
+    function confirmTicket() {
+      const numbers = getEnteredNumbers();
+
+      if (!numbers) return;
+
+      if (wallet < PRICE) {
+        alert("Insufficient wallet balance. Your balance is ETB " +
+          wallet.toFixed(2));
+        return;
+      }
+
+      pendingNumbers = numbers;
 
       document.getElementById("modalNumbers").textContent =
         numbers.join(" – ");
 
       document.getElementById("confirmationContent").classList.remove("hidden");
       document.getElementById("successContent").classList.add("hidden");
-
       document.getElementById("ticketModal").classList.add("show");
     }
 
     function completeTicket() {
-      const numbers = selectedNumbers.slice().sort((a,b) => a-b);
+      if (pendingNumbers.length !== 4 || wallet < PRICE) {
+        closeModal();
+        return;
+      }
+
+      wallet -= PRICE;
+
+      const ticket = {
+        reference: "EJ" + Date.now().toString().slice(-8),
+        numbers: pendingNumbers,
+        date: new Date().toLocaleString(),
+        price: PRICE
+      };
+
+      tickets.push(ticket);
+
+      transactions.push({
+        description: "Ticket purchase " + ticket.reference,
+        amount: -PRICE,
+        date: ticket.date
+      });
+
+      saveData();
+      renderWallet();
+      renderTickets();
+      renderTransactions();
 
       document.getElementById("successNumbers").textContent =
-        numbers.join(" – ");
+        pendingNumbers.join(" – ");
 
       document.getElementById("confirmationContent").classList.add("hidden");
       document.getElementById("successContent").classList.remove("hidden");
@@ -394,8 +551,13 @@
 
     function finishAndClose() {
       closeModal();
-      clearNumbers();
+      pendingNumbers = [];
+      clearInputs();
     }
+
+    renderWallet();
+    renderTickets();
+    renderTransactions();
   </script>
 </body>
 </html>
