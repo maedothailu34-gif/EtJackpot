@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,17 +13,17 @@
       font-family: Arial, sans-serif;
       background: #081426;
       color: white;
-      padding: 20px;
+      padding: 12px;
     }
 
     .app {
-      max-width: 480px;
+      max-width: 600px;
       margin: auto;
     }
 
     header {
       text-align: center;
-      padding: 25px 0;
+      padding: 20px 0;
     }
 
     .logo {
@@ -44,53 +45,56 @@
       border-radius: 10px;
       text-align: center;
       font-size: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     .jackpots {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
+      gap: 10px;
     }
 
     .card {
       background: #12233b;
       border: 1px solid #263b57;
       border-radius: 14px;
-      padding: 18px;
-      margin-bottom: 16px;
+      padding: 14px;
+      margin-bottom: 14px;
     }
 
     .card h3 {
-      font-size: 13px;
+      font-size: 12px;
       color: #aab6c8;
-      margin: 0 0 12px;
+      margin: 0 0 10px;
     }
 
     .amount {
       color: #f4c542;
-      font-size: 23px;
+      font-size: 21px;
       font-weight: bold;
     }
 
     .section-title {
-      margin: 25px 0 15px;
+      margin: 20px 0 12px;
       font-size: 19px;
     }
 
     .numbers {
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 7px;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 5px;
     }
 
     .number {
+      width: 100%;
+      min-width: 0;
+      padding: 0;
       background: #192c46;
       color: white;
       border: 1px solid #344a66;
-      border-radius: 8px;
+      border-radius: 6px;
       aspect-ratio: 1;
-      font-size: 13px;
+      font-size: clamp(10px, 3vw, 13px);
       cursor: pointer;
     }
 
@@ -105,14 +109,14 @@
       color: #f4c542;
       font-weight: bold;
       min-height: 25px;
-      margin: 12px 0;
+      margin: 10px 0;
     }
 
     .button {
       width: 100%;
       border: none;
       border-radius: 10px;
-      padding: 15px;
+      padding: 14px;
       background: #f4c542;
       color: #081426;
       font-weight: bold;
@@ -130,11 +134,7 @@
       color: #aab6c8;
       font-size: 12px;
       text-align: center;
-      margin-top: 20px;
-    }
-
-    @media (max-width: 350px) {
-      .numbers { grid-template-columns: repeat(6, 1fr); }
+      margin-top: 15px;
     }
   </style>
 </head>
