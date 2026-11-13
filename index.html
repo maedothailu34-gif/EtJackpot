@@ -2,430 +2,558 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ETHIO JACKPOT</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETHIO JACKPOT</title>
 
-  <style>
-    * { box-sizing: border-box; }
+<style>
+* { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #081426;
-      color: white;
-      padding: 12px;
-    }
+body {
+  margin: 0;
+  padding: 12px;
+  font-family: Arial, sans-serif;
+  background: #081426;
+  color: white;
+}
 
-    .app { max-width: 600px; margin: auto; }
+.app { max-width: 600px; margin: auto; }
 
-    header { text-align: center; padding: 20px 0; }
+header { text-align: center; padding: 20px 0; }
 
-    .logo {
-      color: #f4c542;
-      font-size: 29px;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
+.logo {
+  color: #f4c542;
+  font-size: 29px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
 
-    .subtitle { color: #aab6c8; margin-top: 8px; }
+.subtitle { color: #aab6c8; margin-top: 8px; }
 
-    .demo {
-      background: #493a12;
-      color: #ffdb70;
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 12px;
-      margin-bottom: 15px;
-    }
+.demo {
+  background: #493a12;
+  color: #ffdb70;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
 
-    .jackpots {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
+.nav {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  padding: 8px 0 14px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #081426;
+}
 
-    .card {
-      background: #12233b;
-      border: 1px solid #263b57;
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 14px;
-    }
+.nav button {
+  flex: 0 0 auto;
+  border: 1px solid #344a66;
+  border-radius: 20px;
+  padding: 10px 13px;
+  background: #12233b;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .card h3 {
-      font-size: 12px;
-      color: #aab6c8;
-      margin: 0 0 10px;
-    }
+.nav button.active {
+  background: #f4c542;
+  color: #081426;
+  border-color: #f4c542;
+}
 
-    .amount {
-      color: #f4c542;
-      font-size: 21px;
-      font-weight: bold;
-    }
+.page { display: none; }
+.page.active { display: block; }
 
-    .section-title {
-      margin: 20px 0 12px;
-      font-size: 19px;
-    }
+.jackpots {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
 
-    .wallet-balance {
-      color: #f4c542;
-      font-size: 28px;
-      font-weight: bold;
-    }
+.card {
+  background: #12233b;
+  border: 1px solid #263b57;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+}
 
-    .numbers-inputs {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin: 18px 0;
-    }
+.card h3 {
+  font-size: 12px;
+  color: #aab6c8;
+  margin: 0 0 10px;
+}
 
-    .number-input {
-      width: 100%;
-      min-width: 0;
-      aspect-ratio: 1;
-      background: #192c46;
-      color: #f4c542;
-      border: 2px solid #344a66;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 25px;
-      font-weight: bold;
-      outline: none;
-    }
+.amount {
+  color: #f4c542;
+  font-size: 21px;
+  font-weight: bold;
+}
 
-    .number-input:focus { border-color: #f4c542; }
-    .number-input::placeholder { color: #75869d; }
+.section-title {
+  margin: 15px 0 12px;
+  font-size: 19px;
+}
 
-    .button {
-      width: 100%;
-      border: none;
-      border-radius: 10px;
-      padding: 14px;
-      background: #f4c542;
-      color: #081426;
-      font-weight: bold;
-      font-size: 15px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
+.wallet-balance {
+  color: #f4c542;
+  font-size: 28px;
+  font-weight: bold;
+}
 
-    .secondary { background: #263b57; color: white; }
+.numbers-inputs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
 
-    .notice {
-      color: #aab6c8;
-      font-size: 12px;
-      text-align: center;
-      margin-top: 15px;
-    }
+.number-input {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
+  background: #192c46;
+  color: #f4c542;
+  border: 2px solid #344a66;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  outline: none;
+}
 
-    .ticket {
-      background: #192c46;
-      border: 1px solid #344a66;
-      border-radius: 10px;
-      padding: 14px;
-      margin-top: 10px;
-    }
+.number-input:focus { border-color: #f4c542; }
+.number-input::placeholder { color: #75869d; }
 
-    .ticket-number {
-      color: #f4c542;
-      font-size: 21px;
-      font-weight: bold;
-      margin: 10px 0;
-      letter-spacing: 2px;
-    }
+.button {
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  background: #f4c542;
+  color: #081426;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+}
 
-    .ticket-info {
-      color: #aab6c8;
-      font-size: 12px;
-      line-height: 1.7;
-    }
+.button:disabled { opacity: 0.6; cursor: not-allowed; }
+.secondary { background: #263b57; color: white; }
 
-    .empty {
-      color: #aab6c8;
-      text-align: center;
-      font-size: 13px;
-      padding: 15px 0;
-    }
+.notice {
+  color: #aab6c8;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 15px;
+}
 
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+.ticket {
+  background: #192c46;
+  border: 1px solid #344a66;
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 10px;
+}
 
-    .modal-overlay.show { display: flex; }
+.ticket-number {
+  color: #f4c542;
+  font-size: 21px;
+  font-weight: bold;
+  margin: 10px 0;
+  letter-spacing: 2px;
+}
 
-    .modal {
-      width: 100%;
-      max-width: 360px;
-      background: #12233b;
-      border: 1px solid #f4c542;
-      border-radius: 18px;
-      padding: 25px 20px;
-      text-align: center;
-    }
+.ticket-info {
+  color: #aab6c8;
+  font-size: 12px;
+  line-height: 1.7;
+}
 
-    .modal h2 {
-      color: #f4c542;
-      margin-top: 0;
-      font-size: 22px;
-    }
+.empty {
+  color: #aab6c8;
+  text-align: center;
+  font-size: 13px;
+  padding: 15px 0;
+}
 
-    .modal-text {
-      color: #aab6c8;
-      font-size: 14px;
-      margin-bottom: 18px;
-    }
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 
-    .modal .ticket-numbers {
-      color: #f4c542;
-      font-size: 25px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      margin: 20px 0;
-    }
+.modal-overlay.show { display: flex; }
 
-    .hidden { display: none; }
+.modal {
+  width: 100%;
+  max-width: 360px;
+  background: #12233b;
+  border: 1px solid #f4c542;
+  border-radius: 18px;
+  padding: 25px 20px;
+  text-align: center;
+}
 
-    @media (max-width: 350px) {
-      .numbers-inputs { gap: 6px; }
-      .number-input { font-size: 21px; }
-    }
-  </style>
+.modal h2 {
+  color: #f4c542;
+  margin-top: 0;
+  font-size: 22px;
+}
+
+.modal-text {
+  color: #aab6c8;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.modal .ticket-numbers {
+  color: #f4c542;
+  font-size: 25px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin: 20px 0;
+}
+
+.hidden { display: none; }
+
+@media (max-width: 350px) {
+  .numbers-inputs { gap: 6px; }
+  .number-input { font-size: 21px; }
+}
+</style>
 </head>
 
 <body>
-  <main class="app">
+<main class="app">
 
-    <header>
-      <div class="logo">ETHIO JACKPOT</div>
-      <div class="subtitle">Your Numbers. Your Chance.</div>
-    </header>
+<header>
+  <div class="logo">ETHIO JACKPOT</div>
+  <div class="subtitle">Your Numbers. Your Chance.</div>
+</header>
 
-    <div class="demo">DEMO VERSION — NO REAL MONEY</div>
+<div class="demo">DEMO VERSION — NO REAL MONEY</div>
 
-    <div class="jackpots">
-      <div class="card">
-        <h3>FIRST PRIZE</h3>
-        <div class="amount">ETB 2,000</div>
-      </div>
+<nav class="nav">
+  <button class="active" onclick="showPage('home', this)">HOME</button>
+  <button onclick="showPage('play', this)">PLAY</button>
+  <button onclick="showPage('wallet', this)">MY WALLET</button>
+  <button onclick="showPage('tickets', this)">MY TICKETS</button>
+  <button onclick="showPage('results', this)">RESULTS</button>
+  <button onclick="showPage('how', this)">HOW TO PLAY</button>
+</nav>
 
-      <div class="card">
-        <h3>SECOND PRIZE</h3>
-        <div class="amount">ETB 500</div>
-      </div>
-    </div>
+<!-- HOME -->
+<section class="page active" id="home">
+  <h2 class="section-title">CURRENT JACKPOT</h2>
 
-    <h2 class="section-title">MY WALLET</h2>
-
+  <div class="jackpots">
     <div class="card">
-      <h3>AVAILABLE DEMO BALANCE</h3>
-      <div class="wallet-balance" id="balance">ETB 50.00</div>
-      <p class="notice">Simulated wallet balance</p>
+      <h3>FIRST PRIZE</h3>
+      <div class="amount">ETB 2,000</div>
     </div>
-
-    <h2 class="section-title">CHOOSE YOUR NUMBERS</h2>
-
     <div class="card">
-      <h3>Enter four different two-digit numbers (01–99)</h3>
-
-      <div class="numbers-inputs">
-        <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="01" aria-label="First number">
-        <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="02" aria-label="Second number">
-        <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="03" aria-label="Third number">
-        <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="04" aria-label="Fourth number">
-      </div>
-
-      <p class="notice">Enter numbers from 01 to 99. No duplicates.</p>
-      <p class="notice">Demo ticket price: ETB 20</p>
-
-      <button class="button secondary" onclick="clearInputs()">CLEAR NUMBERS</button>
-      <button class="button" onclick="confirmTicket()">CONFIRM DEMO TICKET</button>
-    </div>
-
-    <h2 class="section-title">MY TICKETS</h2>
-
-    <div class="card">
-      <div id="ticketsList" class="empty">You have no tickets yet.</div>
-    </div>
-
-    <p class="notice">ETHIO JACKPOT · Prototype Version 2.0</p>
-  </main>
-
-  <div class="modal-overlay" id="ticketModal">
-    <div class="modal">
-
-      <div id="confirmationContent">
-        <h2>CONFIRM YOUR TICKET</h2>
-        <p class="modal-text">Please check your selected numbers.</p>
-        <div class="ticket-numbers" id="modalNumbers"></div>
-        <p>Ticket Price: <strong>ETB 20</strong></p>
-        <p class="notice">DEMO ONLY — No real payment will be made.</p>
-        <button class="button" onclick="completeTicket()">CONFIRM TICKET</button>
-        <button class="button secondary" onclick="closeModal()">CANCEL</button>
-      </div>
-
-      <div id="successContent" class="hidden">
-        <h2>TICKET CONFIRMED!</h2>
-        <p class="modal-text">Your demo ticket has been saved.</p>
-        <div class="ticket-numbers" id="successNumbers"></div>
-        <p class="notice">No real payment has been made.</p>
-        <button class="button" onclick="finishAndClose()">DONE</button>
-      </div>
-
+      <h3>SECOND PRIZE</h3>
+      <div class="amount">ETB 500</div>
     </div>
   </div>
 
-  <script>
-    const PRICE = 20;
+  <div class="card">
+    <h3>WELCOME TO ETHIO JACKPOT</h3>
+    <p>Choose your numbers and create a demo ticket.</p>
+    <p class="notice">This is a demonstration version. No real money or prizes are involved.</p>
+    <button class="button" onclick="showPage('play')">PLAY NOW</button>
+  </div>
+</section>
 
-    let wallet = Number(localStorage.getItem("ej_wallet"));
+<!-- PLAY -->
+<section class="page" id="play">
+  <h2 class="section-title">CHOOSE YOUR NUMBERS</h2>
 
-    if (localStorage.getItem("ej_wallet") === null ||
-        !Number.isFinite(wallet)) {
-      wallet = 50;
-      localStorage.setItem("ej_wallet", wallet);
+  <div class="card">
+    <h3>Enter four different two-digit numbers (01–99)</h3>
+
+    <div class="numbers-inputs">
+      <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="01" aria-label="First number">
+      <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="02" aria-label="Second number">
+      <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="03" aria-label="Third number">
+      <input class="number-input" type="text" inputmode="numeric" maxlength="2" placeholder="04" aria-label="Fourth number">
+    </div>
+
+    <p class="notice">Enter numbers from 01 to 99. No duplicates.</p>
+    <p class="notice">Demo ticket price: ETB 20</p>
+
+    <button class="button secondary" onclick="clearInputs()">CLEAR NUMBERS</button>
+    <button class="button" onclick="confirmTicket()">CONFIRM DEMO TICKET</button>
+  </div>
+</section>
+
+<!-- WALLET -->
+<section class="page" id="wallet">
+  <h2 class="section-title">MY WALLET</h2>
+
+  <div class="card">
+    <h3>AVAILABLE DEMO BALANCE</h3>
+    <div class="wallet-balance" id="balance">ETB 50.00</div>
+    <p class="notice">Simulated wallet balance</p>
+  </div>
+</section>
+
+<!-- TICKETS -->
+<section class="page" id="tickets">
+  <h2 class="section-title">MY TICKETS</h2>
+
+  <div class="card">
+    <div id="ticketsList" class="empty">You have no tickets yet.</div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="page" id="results">
+  <h2 class="section-title">RESULTS</h2>
+
+  <div class="card">
+    <div class="empty">No draw results are available yet.</div>
+    <p class="notice">Results will appear here when a demo draw is conducted.</p>
+  </div>
+</section>
+
+<!-- HOW TO PLAY -->
+<section class="page" id="how">
+  <h2 class="section-title">HOW TO PLAY</h2>
+
+  <div class="card">
+    <h3>1. CHOOSE YOUR NUMBERS</h3>
+    <p>Select four different numbers between 01 and 99.</p>
+
+    <h3>2. CHECK YOUR TICKET</h3>
+    <p>Review your selected numbers before confirming.</p>
+
+    <h3>3. CONFIRM YOUR TICKET</h3>
+    <p>Each demo ticket costs ETB 20 and is deducted from your demo wallet.</p>
+
+    <h3>4. CHECK YOUR TICKETS</h3>
+    <p>Your saved tickets will appear under MY TICKETS.</p>
+
+    <p class="notice">Demo only. No real money, deposits, withdrawals or prizes are involved.</p>
+  </div>
+</section>
+
+<p class="notice">ETHIO JACKPOT · Prototype Version 3.0</p>
+</main>
+
+<!-- TICKET CONFIRMATION MODAL -->
+<div class="modal-overlay" id="ticketModal">
+  <div class="modal">
+
+    <div id="confirmationContent">
+      <h2>CONFIRM YOUR TICKET</h2>
+      <p class="modal-text">Please check your selected numbers.</p>
+      <div class="ticket-numbers" id="modalNumbers"></div>
+      <p>Ticket Price: <strong>ETB 20</strong></p>
+      <p class="notice">DEMO ONLY — No real payment will be made.</p>
+      <button class="button" id="confirmButton" onclick="completeTicket()">CONFIRM TICKET</button>
+      <button class="button secondary" onclick="closeModal()">CANCEL</button>
+    </div>
+
+    <div id="successContent" class="hidden">
+      <h2>TICKET CONFIRMED!</h2>
+      <p class="modal-text">Your demo ticket has been saved.</p>
+      <div class="ticket-numbers" id="successNumbers"></div>
+      <p class="notice">No real payment has been made.</p>
+      <button class="button" onclick="finishAndClose()">DONE</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const PRICE = 20;
+
+let wallet = Number(localStorage.getItem("ej_wallet"));
+
+if (localStorage.getItem("ej_wallet") === null ||
+    !Number.isFinite(wallet)) {
+  wallet = 50;
+  localStorage.setItem("ej_wallet", wallet);
+}
+
+let tickets = JSON.parse(localStorage.getItem("ej_tickets") || "[]");
+let pendingNumbers = [];
+let ticketProcessing = false;
+
+const numberInputs = document.querySelectorAll(".number-input");
+
+function showPage(pageId, button) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.remove("active");
+  });
+
+  document.getElementById(pageId).classList.add("active");
+
+  document.querySelectorAll(".nav button").forEach(btn => {
+    btn.classList.remove("active");
+  });
+
+  if (button) {
+    button.classList.add("active");
+  } else {
+    const matchingButton = Array.from(document.querySelectorAll(".nav button"))
+      .find(btn => btn.getAttribute("onclick").includes("'" + pageId + "'"));
+
+    if (matchingButton) matchingButton.classList.add("active");
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+numberInputs.forEach((input, index) => {
+  input.addEventListener("input", function() {
+    this.value = this.value.replace(/[^0-9]/g, "").slice(0, 2);
+
+    if (this.value.length === 2 && index < 3) {
+      numberInputs[index + 1].focus();
     }
+  });
+});
 
-    let tickets = JSON.parse(localStorage.getItem("ej_tickets") || "[]");
-    let pendingNumbers = [];
+function saveData() {
+  localStorage.setItem("ej_wallet", wallet);
+  localStorage.setItem("ej_tickets", JSON.stringify(tickets));
+}
 
-    const numberInputs = document.querySelectorAll(".number-input");
+function renderWallet() {
+  document.getElementById("balance").textContent =
+    "ETB " + wallet.toFixed(2);
+}
 
-    numberInputs.forEach((input, index) => {
-      input.addEventListener("input", function () {
-        this.value = this.value.replace(/[^0-9]/g, "").slice(0, 2);
+function renderTickets() {
+  const list = document.getElementById("ticketsList");
 
-        if (this.value.length === 2 && index < 3) {
-          numberInputs[index + 1].focus();
-        }
-      });
-    });
+  if (tickets.length === 0) {
+    list.innerHTML = '<div class="empty">You have no tickets yet.</div>';
+    return;
+  }
 
-    function saveData() {
-      localStorage.setItem("ej_wallet", wallet);
-      localStorage.setItem("ej_tickets", JSON.stringify(tickets));
-    }
+  list.innerHTML = tickets.slice().reverse().map(ticket => `
+    <div class="ticket">
+      <strong>Ticket ${ticket.reference}</strong>
+      <div class="ticket-number">${ticket.numbers.join(" – ")}</div>
+      <div class="ticket-info">
+        Price: ETB 20<br>
+        Date: ${ticket.date}
+      </div>
+    </div>
+  `).join("");
+}
 
-    function renderWallet() {
-      document.getElementById("balance").textContent =
-        "ETB " + wallet.toFixed(2);
-    }
+function clearInputs() {
+  numberInputs.forEach(input => input.value = "");
+  numberInputs[0].focus();
+}
 
-    function renderTickets() {
-      const list = document.getElementById("ticketsList");
+function getEnteredNumbers() {
+  const values = Array.from(numberInputs).map(input => input.value.trim());
 
-      if (tickets.length === 0) {
-        list.innerHTML = '<div class="empty">You have no tickets yet.</div>';
-        return;
-      }
+  if (values.some(value => !/^\d{2}$/.test(value))) {
+    alert("Please enter all four numbers using two digits each.");
+    return null;
+  }
 
-      list.innerHTML = tickets.slice().reverse().map(ticket => `
-        <div class="ticket">
-          <strong>Ticket ${ticket.reference}</strong>
-          <div class="ticket-number">${ticket.numbers.join(" – ")}</div>
-          <div class="ticket-info">
-            Price: ETB 20<br>
-            Date: ${ticket.date}
-          </div>
-        </div>
-      `).join("");
-    }
+  const numbers = values.map(Number);
 
-    function clearInputs() {
-      numberInputs.forEach(input => input.value = "");
-      numberInputs[0].focus();
-    }
+  if (numbers.some(n => n < 1 || n > 99)) {
+    alert("Numbers must be between 01 and 99.");
+    return null;
+  }
 
-    function getEnteredNumbers() {
-      const values = Array.from(numberInputs).map(input => input.value.trim());
+  if (new Set(numbers).size !== 4) {
+    alert("Please enter four different numbers.");
+    return null;
+  }
 
-      if (values.some(value => !/^\d{2}$/.test(value))) {
-        alert("Please enter all four numbers using two digits each.");
-        return null;
-      }
+  return values;
+}
 
-      const numbers = values.map(Number);
+function confirmTicket() {
+  const numbers = getEnteredNumbers();
+  if (!numbers) return;
 
-      if (numbers.some(n => n < 1 || n > 99)) {
-        alert("Numbers must be between 01 and 99.");
-        return null;
-      }
+  if (wallet < PRICE) {
+    alert("Insufficient wallet balance. Your balance is ETB " + wallet.toFixed(2));
+    return;
+  }
 
-      if (new Set(numbers).size !== 4) {
-        alert("Please enter four different numbers.");
-        return null;
-      }
+  pendingNumbers = numbers;
+  ticketProcessing = false;
 
-      return values;
-    }
+  document.getElementById("confirmButton").disabled = false;
+  document.getElementById("modalNumbers").textContent = numbers.join(" – ");
+  document.getElementById("confirmationContent").classList.remove("hidden");
+  document.getElementById("successContent").classList.add("hidden");
+  document.getElementById("ticketModal").classList.add("show");
+}
 
-    function confirmTicket() {
-      const numbers = getEnteredNumbers();
-      if (!numbers) return;
+function completeTicket() {
+  if (ticketProcessing) return;
 
-      if (wallet < PRICE) {
-        alert("Insufficient wallet balance. Your balance is ETB " + wallet.toFixed(2));
-        return;
-      }
+  if (pendingNumbers.length !== 4 || wallet < PRICE) {
+    closeModal();
+    return;
+  }
 
-      pendingNumbers = numbers;
+  ticketProcessing = true;
+  document.getElementById("confirmButton").disabled = true;
 
-      document.getElementById("modalNumbers").textContent = numbers.join(" – ");
-      document.getElementById("confirmationContent").classList.remove("hidden");
-      document.getElementById("successContent").classList.add("hidden");
-      document.getElementById("ticketModal").classList.add("show");
-    }
+  wallet -= PRICE;
 
-    function completeTicket() {
-      if (pendingNumbers.length !== 4 || wallet < PRICE) {
-        closeModal();
-        return;
-      }
+  const ticket = {
+    reference: "EJ" + Date.now().toString().slice(-8),
+    numbers: pendingNumbers,
+    date: new Date().toLocaleString(),
+    price: PRICE
+  };
 
-      wallet -= PRICE;
+  tickets.push(ticket);
+  saveData();
+  renderWallet();
+  renderTickets();
 
-      const ticket = {
-        reference: "EJ" + Date.now().toString().slice(-8),
-        numbers: pendingNumbers,
-        date: new Date().toLocaleString(),
-        price: PRICE
-      };
+  document.getElementById("successNumbers").textContent =
+    pendingNumbers.join(" – ");
 
-      tickets.push(ticket);
-      saveData();
-      renderWallet();
-      renderTickets();
+  document.getElementById("confirmationContent").classList.add("hidden");
+  document.getElementById("successContent").classList.remove("hidden");
+}
 
-      document.getElementById("successNumbers").textContent =
-        pendingNumbers.join(" – ");
+function closeModal() {
+  document.getElementById("ticketModal").classList.remove("show");
+}
 
-      document.getElementById("confirmationContent").classList.add("hidden");
-      document.getElementById("successContent").classList.remove("hidden");
-    }
+function finishAndClose() {
+  closeModal();
+  pendingNumbers = [];
+  ticketProcessing = false;
+  clearInputs();
+  showPage("tickets");
+}
 
-    function closeModal() {
-      document.getElementById("ticketModal").classList.remove("show");
-    }
+renderWallet();
+renderTickets();
+</script>
 
-    function finishAndClose() {
-      closeModal();
-      pendingNumbers = [];
-      clearInputs();
-    }
-
-    renderWallet();
-    renderTickets();
-  </script>
 </body>
 </html>
