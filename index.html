@@ -383,15 +383,9 @@ header { text-align: center; padding: 20px 0; }
 <script>
 const PRICE = 20;
 
-let wallet = Number(localStorage.getItem("ej_wallet"));
-
-if (localStorage.getItem("ej_wallet") === null ||
-    !Number.isFinite(wallet)) {
-  wallet = 50;
-  localStorage.setItem("ej_wallet", wallet);
-}
-
-let tickets = JSON.parse(localStorage.getItem("ej_tickets") || "[]");
+let wallet = 0;
+let loginReady = false;
+let tickets = JSON.parse(localStorage.getItem("ej_supabase_tickets") || "[]");
 let pendingNumbers = [];
 let ticketProcessing = false;
 
@@ -431,8 +425,8 @@ numberInputs.forEach((input, index) => {
 });
 
 function saveData() {
-  localStorage.setItem("ej_wallet", wallet);
-  localStorage.setItem("ej_tickets", JSON.stringify(tickets));
+  // Only display tickets returned after a successful Supabase purchase.
+  localStorage.setItem("ej_supabase_tickets", JSON.stringify(tickets));
 }
 
 function renderWallet() {
@@ -492,6 +486,11 @@ function confirmTicket() {
   const numbers = getEnteredNumbers();
   if (!numbers) return;
 
+  if (!loginReady) {
+    alert("Please wait until your Telegram account connects.");
+    return;
+  }
+
   if (wallet < PRICE) {
     alert("Insufficient wallet balance. Your balance is ETB " + wallet.toFixed(2));
     return;
@@ -507,36 +506,69 @@ function confirmTicket() {
   document.getElementById("ticketModal").classList.add("show");
 }
 
-function completeTicket() {
+async function completeTicket() {
   if (ticketProcessing) return;
 
-  if (pendingNumbers.length !== 4 || wallet < PRICE) {
-    closeModal();
+  if (!loginReady || pendingNumbers.length !== 4) {
+    alert("Your Telegram account is not ready. Please reopen the app from Telegram.");
     return;
   }
 
   ticketProcessing = true;
   document.getElementById("confirmButton").disabled = true;
 
-  wallet -= PRICE;
+  try {
+    const tg = window.Telegram && window.Telegram.WebApp;
 
-  const ticket = {
-    reference: "EJ" + Date.now().toString().slice(-8),
-    numbers: pendingNumbers,
-    date: new Date().toLocaleString(),
-    price: PRICE
-  };
+    if (!tg || !tg.initData) {
+      throw new Error("Please open ETHIO JACKPOT from Telegram.");
+    }
 
-  tickets.push(ticket);
-  saveData();
-  renderWallet();
-  renderTickets();
+    const response = await fetch(
+      "https://amhatwqhqgerhtvkgtos.supabase.co/functions/v1/rapid-processor",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          initData: tg.initData,
+          action: "purchase_ticket",
+          numbers: pendingNumbers.map(Number)
+        })
+      }
+    );
 
-  document.getElementById("successNumbers").textContent =
-    pendingNumbers.join(" – ");
+    const result = await response.json();
 
-  document.getElementById("confirmationContent").classList.add("hidden");
-  document.getElementById("successContent").classList.remove("hidden");
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "Ticket purchase failed.");
+    }
+
+    wallet = Number(result.wallet_balance);
+
+    const purchase = result.purchase || {};
+    const ticket = {
+      reference: purchase.ticket_id || ("EJ" + Date.now().toString().slice(-8)),
+      numbers: pendingNumbers.slice(),
+      date: new Date().toLocaleString(),
+      price: PRICE
+    };
+
+    tickets.push(ticket);
+    saveData();
+    renderWallet();
+    renderTickets();
+
+    document.getElementById("successNumbers").textContent =
+      pendingNumbers.join(" – ");
+
+    document.getElementById("confirmationContent").classList.add("hidden");
+    document.getElementById("successContent").classList.remove("hidden");
+
+  } catch (error) {
+    alert("Purchase failed: " + error.message);
+    ticketProcessing = false;
+    document.getElementById("confirmButton").disabled = false;
+  }
 }
 
 function closeModal() {
@@ -584,8 +616,13 @@ renderTickets();
       throw new Error(result.error || "Connection failed.");
     }
 
-    document.getElementById("balance").textContent =
-      "ETB " + Number(result.wallet_balance).toFixed(2);
+    wallet = Number(result.wallet_balance);
+    if (!Number.isFinite(wallet)) {
+      throw new Error("The wallet balance returned by the server is invalid.");
+    }
+
+    loginReady = true;
+    renderWallet();
 
     alert("Connected successfully! Your Telegram account is registered.");
   } catch (error) {
