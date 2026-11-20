@@ -325,12 +325,59 @@ header { text-align: center; padding: 20px 0; }
 <section class="page" id="results">
   <h2 class="section-title">RESULTS</h2>
 
+  <div class="card" style="text-align:center;">
+    <h3>NEXT DRAW STARTS IN</h3>
+
+    <div id="draw-countdown"
+         style="font-size:32px;font-weight:bold;color:#D4AF37;margin:20px 0;">
+      Loading...
+    </div>
+
+    <p style="color:#aaa;font-size:13px;">
+      Days : Hours : Minutes : Seconds
+    </p>
+
+    <p class="notice">
+      Draw date: 21 November 2026<br>
+      Draw time: 6:00 PM Ethiopia time
+    </p>
+  </div>
+
   <div class="card">
     <div class="empty">No draw results are available yet.</div>
-    <p class="notice">Results will appear here when a demo draw is conducted.</p>
+    <p class="notice">Results will appear here when a draw is completed.</p>
   </div>
 </section>
 
+<script>
+(function () {
+  const target = new Date("2026-11-21T18:00:00+03:00").getTime();
+  const display = document.getElementById("draw-countdown");
+
+  function updateCountdown() {
+    const remaining = target - Date.now();
+
+    if (remaining <= 0) {
+      display.textContent = "DRAW TIME!";
+      return;
+    }
+
+    const days = Math.floor(remaining / 86400000);
+    const hours = Math.floor((remaining % 86400000) / 3600000);
+    const minutes = Math.floor((remaining % 3600000) / 60000);
+    const seconds = Math.floor((remaining % 60000) / 1000);
+
+    display.textContent =
+      String(days).padStart(2, "0") + " : " +
+      String(hours).padStart(2, "0") + " : " +
+      String(minutes).padStart(2, "0") + " : " +
+      String(seconds).padStart(2, "0");
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+})();
+</script>
 <!-- HOW TO PLAY -->
 <section class="page" id="how">
   <h2 class="section-title">HOW TO PLAY</h2>
