@@ -337,9 +337,8 @@ header { text-align: center; padding: 20px 0; }
       Days : Hours : Minutes : Seconds
     </p>
 
-    <p class="notice">
-      Draw date: 21 November 2026<br>
-      Draw time: 6:00 PM Ethiopia time
+    <p class="notice" id="draw-schedule-label">
+      Loading draw schedule...
     </p>
   </div>
 
@@ -351,10 +350,62 @@ header { text-align: center; padding: 20px 0; }
 
 <script>
 (function () {
-  const target = new Date("2026-11-21T18:00:00+03:00").getTime();
+  let target = null;
   const display = document.getElementById("draw-countdown");
+  async function loadDrawTime() {
+  try {
+    const response = await fetch(
+      "https://amhatwqhqgerhtvkgtos.supabase.co/rest/v1/rpc/get_next_draw_time",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": "sb_publishable_6D5Ni_Wk2S9wc_1KCAS0Bg_Xjjws9u2"
+        },
+        body: "{}"
+      }
+    );
+
+    if (!response.ok) throw new Error("Could not load draw time");
+
+    const drawTime = await response.json();
+    target = drawTime ? new Date(drawTime).getTime() : null;
+
+    const scheduleLabel = document.getElementById("draw-schedule-label");
+    if (scheduleLabel) {
+      if (drawTime) {
+        const date = new Date(drawTime);
+        const dateText = date.toLocaleDateString("en-GB", {
+          timeZone: "Africa/Addis_Ababa",
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        });
+        const timeText = date.toLocaleTimeString("en-US", {
+          timeZone: "Africa/Addis_Ababa",
+          hour: "numeric",
+          minute: "2-digit"
+        });
+        scheduleLabel.textContent =
+          "Draw date: " + dateText + " | Draw time: " + timeText + " Ethiopia time";
+      } else {
+        scheduleLabel.textContent = "No open draw is currently scheduled.";
+      }
+    }
+
+    updateCountdown();
+
+  } catch (error) {
+    display.textContent = "Unable to load draw time";
+  }
+}
 
   function updateCountdown() {
+    if (!target) {
+      display.textContent = "Loading...";
+      return;
+    }
+
     const remaining = target - Date.now();
 
     if (remaining <= 0) {
@@ -374,6 +425,8 @@ header { text-align: center; padding: 20px 0; }
       String(seconds).padStart(2, "0");
   }
 
+  loadDrawTime();
+  setInterval(loadDrawTime, 60000);
   updateCountdown();
   setInterval(updateCountdown, 1000);
 })();
